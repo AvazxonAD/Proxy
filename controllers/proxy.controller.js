@@ -64,13 +64,13 @@ exports.createProxy = asyncHandler(async (req, res, next) => {
     if(parseInt(myEnterpriseInn) !== req.user.inn){
         return next(new ErrorResponse('O\'zinggizning korxonanggiz inn raqami notogri kiritildi'))
     }
-    if(myEnterpriseName !== req.user.name){
+    if(myEnterpriseName.trim() !== req.user.name){
         return next(new ErrorResponse('O\'zinggizning korxonanggiz nomini notog\'ri kiritdinggiz'))
     }
     if(ReliableJSHR.toString().length !== 14){
         return next(new ErrorResponse('Ishonchli odam JSHRi 14 ta raqamdan iborat bolishi zarur'))
     }
-    if(hisEnterpriseInn.trim().toString().length !== 9){
+    if(hisEnterpriseInn.toString().length !== 9){
         return next(new ErrorResponse('Hamkor korxona inn raqami 9 ta raqamdan iborat bolishi zarur'))
     }
     // malumotni database ga yukalash

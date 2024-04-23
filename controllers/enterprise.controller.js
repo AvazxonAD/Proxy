@@ -15,7 +15,7 @@ exports.register = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse('Parol kamida 6 ta belgidan kam bolmasligi kerak', 400))
     }
     if(inn.toString().length !== 9){
-        return next(new ErrorResponse("Inn raqami 9 ta belgidan iborat bolmasligi kerak"))
+        return next(new ErrorResponse("Inn raqami 9 ta belgidan iborat bolishi kerak"))
     }
 
     // 2. Tegishli inn va nom bilan enterprise ni izlash
