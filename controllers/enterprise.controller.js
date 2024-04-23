@@ -50,7 +50,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     const { name, password } = req.body;
 
     // Ma'lumot bazasidan foydalanuvchi obyektini izlash
-    const enterprise = await Enterprise.findOne({ name });
+    const enterprise = await Enterprise.findOne({ name : name.trim() });
 
     // Agar foydalanuvchi topilmasa, xato yuborish
     if (!enterprise) {
