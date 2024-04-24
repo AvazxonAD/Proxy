@@ -49,6 +49,10 @@ const proxySchema = new mongoose.Schema({
         type : String,
         required : true
     },
+    myAccountant : {
+        type : String,
+        required : true
+    },
     hisEnterpriseName : {
         type : String,
         required :  true
@@ -66,6 +70,10 @@ const proxySchema = new mongoose.Schema({
         required : true
     },
     hisBoss : {
+        type : String,
+        required : true
+    },
+    hisAccountant : {
         type : String,
         required : true
     },
