@@ -30,6 +30,8 @@ exports.createProxy = asyncHandler(async (req, res, next) => {
         GivenByWhom,
         givenDate,
         goods,
+        myAccountant,
+        hisAccountant
     } = req.body
     // malumotlar bosh emasligiga ishonch hosil qilish 
     if (!proxyNumber || 
@@ -55,7 +57,10 @@ exports.createProxy = asyncHandler(async (req, res, next) => {
         !ReliablePassport || 
         !GivenByWhom || 
         !givenDate || 
-        !goods){
+        !goods,
+        !myAccountant,
+        !hisAccountant
+    ){
         return next(new ErrorResponse('Barcha sorovlar toldirilishi shart', 400));
     }    
     if(!req.user){
@@ -99,6 +104,8 @@ exports.createProxy = asyncHandler(async (req, res, next) => {
         GivenByWhom,
         givenDate,
         goods,
+        myAccountant,
+        hisAccountant,
         enterpriseId : req.user._id
     })
 
@@ -162,13 +169,17 @@ exports.openSearchInnPartner = asyncHandler(async (req, res, next) => {
     const partner = await Proxy.findOne({hisEnterpriseInn : parseInt(req.params.id)})
     const hisEnterprise = {}
     if(!partner){
-        return next(new ErrorResponse('Inn raqam topilmadi ', 400))
+        return res.status(404).json({
+            success : false,
+            message : "Bu inn raqamli korxona topilmadi"
+        })
     }
     hisEnterprise.hisEnterpriseName = partner.hisEnterpriseName
     hisEnterprise.hisAccountNumber = partner.hisAccountNumber
     hisEnterprise.hisSWFT = partner.hisSWFT
     hisEnterprise.hisAddress = partner.hisAddress
     hisEnterprise.hisBoss = partner.hisBoss
+    hisEnterprise.hisAccountant = partner.hisAccountant
     return res.status(200).json({
         success : true,
         data : hisEnterprise
@@ -182,13 +193,17 @@ exports.openSearchInnMy = asyncHandler(async (req, res, next) => {
     const I = await Proxy.findOne({myEnterpriseInn : parseInt(req.params.id)})
     const myEnterprise = {}
     if(!I) {
-        return next(new ErrorResponse('Inn raqam topilmadi', 400)) 
+        return res.status(404).json({
+            success : false,
+            message : "Inn raqamingizni notog\'ri kiritdinggiz "
+        }) 
     }
     myEnterprise.myEnterpriseName = I.myEnterpriseName
     myEnterprise.myAccountNumber = I.myAccountNumber
     myEnterprise.mySWFT = I.mySWFT
     myEnterprise.myAddress = I.myAddress
     myEnterprise.myBoss = I.myBoss
+    myEnterprise.myAccountant = I.myAccountant
     res.status(200).json({
         success : true,
         data : myEnterprise
