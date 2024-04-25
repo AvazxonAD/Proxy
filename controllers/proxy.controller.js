@@ -67,16 +67,16 @@ exports.createProxy = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse('Royhatdan otmagan', 403))
     }
     if(parseInt(myEnterpriseInn) !== req.user.inn){
-        return next(new ErrorResponse('O\'zinggizning korxonanggiz inn raqami notogri kiritildi'))
+        return next(new ErrorResponse('O\'zinggizning korxonanggiz inn raqami notogri kiritildi', 403))
     }
     if(myEnterpriseName.trim() !== req.user.name){
-        return next(new ErrorResponse('O\'zinggizning korxonanggiz nomini notog\'ri kiritdinggiz'))
+        return next(new ErrorResponse('O\'zinggizning korxonanggiz nomini notog\'ri kiritdinggiz', 403))
     }
     if(ReliableJSHR.toString().length !== 14){
-        return next(new ErrorResponse('Ishonchli odam JSHRi 14 ta raqamdan iborat bolishi zarur'))
+        return next(new ErrorResponse('Ishonchli odam JSHRi 14 ta raqamdan iborat bolishi zarur', 403))
     }
     if(hisEnterpriseInn.toString().length !== 9){
-        return next(new ErrorResponse('Hamkor korxona inn raqami 9 ta raqamdan iborat bolishi zarur'))
+        return next(new ErrorResponse('Hamkor korxona inn raqami 9 ta raqamdan iborat bolishi zarur', 403))
     }
     // malumotni database ga yukalash
     const proxy = await Proxy.create({
@@ -119,42 +119,46 @@ exports.createProxy = asyncHandler(async (req, res, next) => {
         proxy
     })
 })
-// get all proxy 
+// get all proxy
 exports.getAllProxy = asyncHandler(async (req, res, next) => {
-    //pagination
-    const pageLimit = process.env.PAGE_LIMIT || 2
-    const limit = parseInt(req.query.limit || pageLimit)
-    const page = parseInt(req.query.page) || 1
+    // Pagination
+    const pageLimit = process.env.PAGE_LIMIT || 5;
+    const limit = parseInt(req.query.limit || pageLimit);
+    const page = parseInt(req.query.page) || 1;
     
-    if(!req.user){
-        return next(new ErrorResponse('Unregistered user'))
+    if (!req.user) {
+        return next(new ErrorResponse('Unregistered user', 403));
     }
-    const proxy = await Proxy
-        .find({enterpriseId : req.user._id})
-        .skip((page * limit) - limit)
-        .limit(limit)
 
-    // pagination count
-    const proxyLength = await Proxy.find({enterpriseId : req.user._id})
-    
-    const total = proxyLength.length
+    const proxy = await Proxy
+        .find({ enterpriseId: req.user._id })
+        .sort({ createdAt: -1 }) // createdAt bo'yicha eng oxirgi kiritilganlarni birinchi qatorga chiqarish
+        .skip((page * limit) - limit)
+        .limit(limit);
+
+    // Pagination count
+    const proxyLength = await Proxy.find({ enterpriseId: req.user._id });
+    const total = proxyLength.length;
+
     res.status(200).json({
-        success : true,
-        pageCount: Math.ceil(total/limit),
+        success: true,
+        pageCount: Math.ceil(total / limit),
+        proxyCount: total,
         currentPage: page,
-        nextPage: Math.ceil(total/limit) < page + 1 ? null : page + 1,
-        data : proxy.reverse()
-    })
-})
+        nextPage: Math.ceil(total / limit) < page + 1 ? null : page + 1,
+        data: proxy
+    });
+});
+
 // delete proxy 
 exports.deleteProxy  = asyncHandler(async (req, res, next) => {
     if(!req.user){
-        return next(new ErrorResponse('Unregistered user'))
+        return next(new ErrorResponse('Unregistered user', 403))
     }
     const enterprise = await Enterprise.findById(req.user._id)
     const deletedProxy = await Proxy.findByIdAndDelete(req.params.id);
     if (!deletedProxy) {
-        return next(new ErrorResponse('Proxy not found'));
+        return next(new ErrorResponse('Proxy not found', 403));
     }
     res.status(200).json({
         success : true,
