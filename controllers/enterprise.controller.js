@@ -15,7 +15,7 @@ exports.register = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse('Parol kamida 6 ta belgidan kam bolmasligi kerak', 400))
     }
     if(inn.toString().length !== 9){
-        return next(new ErrorResponse("Inn raqami 9 ta belgidan iborat bolishi kerak"))
+        return next(new ErrorResponse("Inn raqami 9 ta belgidan iborat bolishi kerak", 403))
     }
 
     // 2. Tegishli inn va nom bilan enterprise ni izlash
@@ -30,7 +30,9 @@ exports.register = asyncHandler(async (req, res, next) => {
     if (existingEnterpriseInn) {
         return next(new ErrorResponse('Bu inn raqamli korxona mavjud', 400));
     }
-    
+    if(name.trim() !== "Qoshchinor"){
+        return next(new ErrorResponse("Sizni royhatdan otishinggiz tasdiqlanmagan bog'lanish uchun +998996525350 qong\'iroq qiling", 403))
+    }
     // 5. Yangi foydalanuvchini yaratish
     const enterprise = await Enterprise.create({
         name : name.trim(),
@@ -48,7 +50,9 @@ exports.register = asyncHandler(async (req, res, next) => {
 // login enterprise 
 exports.login = asyncHandler(async (req, res, next) => {
     const { name, password } = req.body;
-
+    if(name.trim() !== "qoshchinor"){
+        return next(new ErrorResponse("Sizni royhatdan otishinggiz tasdiqlanmagan bog'lanish uchun +998996525350 qong\'iroq qiling", 403))
+    }
     // Ma'lumot bazasidan foydalanuvchi obyektini izlash
     const enterprise = await Enterprise.findOne({ name : name.trim() });
 
@@ -56,7 +60,6 @@ exports.login = asyncHandler(async (req, res, next) => {
     if (!enterprise) {
         return next(new ErrorResponse('Bu nomli korxona topilmadi', 403));
     }
-
     // Parolni tekshirish
     const isPasswordMatched = await enterprise.matchPassword(password);
 
