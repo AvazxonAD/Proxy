@@ -30,9 +30,6 @@ exports.register = asyncHandler(async (req, res, next) => {
     if (existingEnterpriseInn) {
         return next(new ErrorResponse('Bu inn raqamli korxona mavjud', 400));
     }
-    if(name.trim() !== "Qoshchinor"){
-        return next(new ErrorResponse("Sizni royhatdan otishinggiz tasdiqlanmagan bog'lanish uchun +998996525350 qong\'iroq qiling", 403))
-    }
     // 5. Yangi foydalanuvchini yaratish
     const enterprise = await Enterprise.create({
         name : name.trim(),
@@ -50,9 +47,6 @@ exports.register = asyncHandler(async (req, res, next) => {
 // login enterprise 
 exports.login = asyncHandler(async (req, res, next) => {
     const { name, password } = req.body;
-    if(name.trim() !== "qoshchinor"){
-        return next(new ErrorResponse("Sizni royhatdan otishinggiz tasdiqlanmagan bog'lanish uchun +998996525350 qong\'iroq qiling", 403))
-    }
     // Ma'lumot bazasidan foydalanuvchi obyektini izlash
     const enterprise = await Enterprise.findOne({ name : name.trim() });
 
