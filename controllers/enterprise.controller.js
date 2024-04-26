@@ -56,7 +56,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     // Ma'lumot bazasidan foydalanuvchi obyektini izlash
     const enterprise = await Enterprise.findOne({ name : name.trim() });
 
-    // Agar foydalanuvchi topilmasa, xato yuborish
+    // Agar foydalanuvchi topilmasa, xato yuborisH
     if (!enterprise) {
         return next(new ErrorResponse('Bu nomli korxona topilmadi', 403));
     }
