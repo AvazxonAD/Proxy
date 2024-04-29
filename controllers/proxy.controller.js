@@ -57,8 +57,8 @@ exports.createProxy = asyncHandler(async (req, res, next) => {
         !ReliablePassport || 
         !GivenByWhom || 
         !givenDate || 
-        !goods,
-        !myAccountant,
+        !goods ||
+        !myAccountant ||
         !hisAccountant
     ){
         return next(new ErrorResponse('Barcha sorovlar toldirilishi shart', 400));
@@ -81,8 +81,8 @@ exports.createProxy = asyncHandler(async (req, res, next) => {
     // malumotni database ga yukalash
     const proxy = await Proxy.create({
         proxyNumber,
-        dateHead,
-        dateEnd,
+        dateHead : dateHead.split("T")[0].substring(0, 10),
+        dateEnd : dateEnd.split("T")[0].substring(0, 10),
         agreementNumber ,
         dateAgreement ,
         myEnterpriseInn ,
@@ -135,7 +135,6 @@ exports.getAllProxy = asyncHandler(async (req, res, next) => {
         .sort({ createdAt: -1 }) // createdAt bo'yicha eng oxirgi kiritilganlarni birinchi qatorga chiqarish
         .skip((page * limit) - limit)
         .limit(limit);
-
     // Pagination count
     const proxyLength = await Proxy.find({ enterpriseId: req.user._id });
     const total = proxyLength.length;
@@ -149,7 +148,13 @@ exports.getAllProxy = asyncHandler(async (req, res, next) => {
         data: proxy
     });
 });
-
+exports.getDataProxy = asyncHandler(async (req, res, next) => {
+    const proxy = await Proxy.find({dateHead : req.body.date})
+    res.status(200).json({
+        success : true,
+        data : proxy
+    })
+});
 // delete proxy 
 exports.deleteProxy  = asyncHandler(async (req, res, next) => {
     if(!req.user){

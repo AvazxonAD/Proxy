@@ -6,11 +6,11 @@ const proxySchema = new mongoose.Schema({
         required: true
     },
     dateHead: {
-        type: Date,
+        type: String,
         required: true,
     },
     dateEnd: {
-        type: Date,
+        type: String,
         required: true,
     },
     agreementNumber : {
