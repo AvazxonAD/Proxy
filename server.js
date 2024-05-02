@@ -1,7 +1,6 @@
 const express = require('express')
 const colors = require('colors')
 const connectDB = require('./config/db')
-const morgan = require('morgan')
 const errorHandler = require('./middlewares/error')
 const cors = require('cors')
 
@@ -29,4 +28,4 @@ app.use(errorHandler)
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
     console.log(`server run on port ${PORT}`.bgBlue)
-})
+})  
