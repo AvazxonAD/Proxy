@@ -24,9 +24,6 @@ app.use('/proxy', require('./routers/proxy.router'))
 
 app.use(errorHandler)
 
-if(process.env.NODE_ENV === 'development'){
-    app.use(morgan('dev'))
-}
 
 
 const PORT = process.env.PORT || 3000
