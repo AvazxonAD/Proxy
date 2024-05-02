@@ -2,6 +2,7 @@ const Proxy = require('../models/proxy.models')
 const Enterprise = require('../models/enterprise.models')
 const asyncHandler = require('../middlewares/async')
 const ErrorResponse = require('../utils/error.response')
+const Product = require('../models/products.models')
 
 // add new proxy 
 exports.createProxy = asyncHandler(async (req, res, next) => {
@@ -21,10 +22,10 @@ exports.createProxy = asyncHandler(async (req, res, next) => {
         hisEnterpriseName ,
         hisAccountNumber ,
         hisSWFT,
-        hisAddress ,
-        hisBoss ,
-        ReliableJSHR ,
-        ReliableFIO ,
+        hisAddress,
+        hisBoss,
+        ReliableJSHR,
+        ReliableFIO,
         ReliablePosition,
         ReliablePassport,
         GivenByWhom,
@@ -216,5 +217,14 @@ exports.openSearchInnMy = asyncHandler(async (req, res, next) => {
     res.status(200).json({
         success : true,
         data : myEnterprise
+    })
+})
+
+// katalog get 
+exports.katalog = asyncHandler(async (req, res, next) => {
+    const products = await Product.find()
+    res.status(200).json({
+        success : true,
+        katalog : products[0].product
     })
 })
