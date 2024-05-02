@@ -1,0 +1,2 @@
+[44mserver run on port \\.\pipe\ce9f4fb6-1ff2-4593-be50-a0b651e79f1a[49m
+[34mmongodb set to : 127.0.0.1[39m
