@@ -1,0 +1,13 @@
+[44mserver run on port \\.\pipe\f0eb34f1-ac2e-41f1-aec0-f2574ce7391b[49m
+[34mmongodb set to : 127.0.0.1[39m
+[31mError: He didn't miss it
+    at D:\porfolio\proxy\proxy\middlewares\auth.js:12:21
+    at D:\porfolio\proxy\proxy\middlewares\async.js:2:21
+    at Layer.handle [as handle_request] (D:\porfolio\proxy\proxy\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\porfolio\proxy\proxy\node_modules\express\lib\router\route.js:149:13)
+    at Route.dispatch (D:\porfolio\proxy\proxy\node_modules\express\lib\router\route.js:119:3)
+    at Layer.handle [as handle_request] (D:\porfolio\proxy\proxy\node_modules\express\lib\router\layer.js:95:5)
+    at D:\porfolio\proxy\proxy\node_modules\express\lib\router\index.js:284:15
+    at Function.process_params (D:\porfolio\proxy\proxy\node_modules\express\lib\router\index.js:346:12)
+    at next (D:\porfolio\proxy\proxy\node_modules\express\lib\router\index.js:280:10)
+    at Function.handle (D:\porfolio\proxy\proxy\node_modules\express\lib\router\index.js:175:3)[39m

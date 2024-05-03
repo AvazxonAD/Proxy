@@ -228,3 +228,29 @@ exports.katalog = asyncHandler(async (req, res, next) => {
         katalog : products[0].product
     })
 })
+exports.searchProxy = asyncHandler(async (req, res, next) => {
+    let result = []
+    const {dateHead, dateEnd} = req.body
+    const dateHeadBody = new Date(dateHead)
+    const DateEndBody = new Date(dateEnd)
+    if (!req.user) {
+        return next(new ErrorResponse('Unregistered user', 403));
+    }
+    const proxies = await Proxy.find({enterpriseId : req.user._id})
+    for(let proxy of proxies){
+        const proxyDate = new Date(proxy.dateHead)
+        if(proxyDate.getTime() > dateHeadBody.getTime() && proxyDate.getTime() < DateEndBody.getTime()){
+            result.push(proxy)
+        }
+    }
+    if(result.length > 0){
+        return res.status(200).json({
+            success : true,
+            data : result
+    })
+    }
+    return res.status(404).json({
+        success : false,
+        message : "Ushbu interval ichida malumot yoq"
+    })
+})
